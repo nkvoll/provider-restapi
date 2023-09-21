@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Upbound Inc.
+Copyright 2023 Njal Karevoll.
 */
 
 package v1beta1
@@ -13,7 +13,7 @@ import (
 
 // Package type metadata.
 const (
-	Group   = "template.upbound.io"
+	Group   = "restapi.k8s.karevoll.no"
 	Version = "v1beta1"
 )
 

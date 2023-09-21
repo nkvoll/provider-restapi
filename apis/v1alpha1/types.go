@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Upbound Inc.
+Copyright 2023 Njal Karevoll.
 */
 
 package v1alpha1
@@ -22,11 +22,11 @@ type StoreConfigStatus struct {
 
 // +kubebuilder:object:root=true
 
-// A StoreConfig configures how template controller should store connection details.
+// A StoreConfig configures how restapi controller should store connection details.
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:printcolumn:name="TYPE",type="string",JSONPath=".spec.type"
 // +kubebuilder:printcolumn:name="DEFAULT-SCOPE",type="string",JSONPath=".spec.defaultScope"
-// +kubebuilder:resource:scope=Cluster,categories={crossplane,store,template}
+// +kubebuilder:resource:scope=Cluster,categories={crossplane,store,restapi}
 // +kubebuilder:subresource:status
 type StoreConfig struct {
 	metav1.TypeMeta   `json:",inline"`

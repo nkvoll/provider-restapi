@@ -1,9 +1,9 @@
 /*
-Copyright 2021 Upbound Inc.
+Copyright 2023 Njal Karevoll.
 */
 
-// Package v1alpha1 contains the core resources of the template jet provider.
+// Package v1alpha1 contains the core resources of the restapi jet provider.
 // +kubebuilder:object:generate=true
-// +groupName=template.upbound.io
+// +groupName=restapi.k8s.karevoll.no
 // +versionName=v1alpha1
 package v1alpha1

@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Upbound Inc.
+Copyright 2023 Njal Karevoll.
 */
 
 package main
@@ -11,7 +11,7 @@ import (
 
 	"github.com/upbound/upjet/pkg/pipeline"
 
-	"github.com/upbound/upjet-provider-template/config"
+	"github.com/nkvoll/provider-restapi/config"
 )
 
 func main() {

@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Upbound Inc.
+Copyright 2023 Njal Karevoll.
 */
 
 package config
@@ -10,7 +10,7 @@ import "github.com/upbound/upjet/pkg/config"
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
-	"null_resource": config.IdentifierFromProvider,
+	"restapi_object": config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the
