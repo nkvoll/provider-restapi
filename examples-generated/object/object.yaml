@@ -1,0 +1,13 @@
+apiVersion: object.restapi.k8s.karevoll.no/v1alpha1
+kind: Object
+metadata:
+  annotations:
+    meta.upbound.io/example-id: object/v1alpha1/object
+  labels:
+    testing.upbound.io/example-name: Foo2
+  name: foo2
+spec:
+  forProvider:
+    data: '{ "id": "55555", "first": "Foo", "last": "Bar" }'
+    path: /api/objects
+    provider: ${restapi.restapi_headers}

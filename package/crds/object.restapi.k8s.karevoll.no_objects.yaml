@@ -1,0 +1,782 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.13.0
+  name: objects.object.restapi.k8s.karevoll.no
+spec:
+  group: object.restapi.k8s.karevoll.no
+  names:
+    categories:
+    - crossplane
+    - managed
+    - restapi
+    kind: Object
+    listKind: ObjectList
+    plural: objects
+    singular: object
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Object is the Schema for the Objects API. Acting as a wrapper
+          of cURL, this object supports POST, GET, PUT and DELETE on the specified
+          url
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ObjectSpec defines the desired state of Object
+            properties:
+              deletionPolicy:
+                default: Delete
+                description: 'DeletionPolicy specifies what will happen to the underlying
+                  external when this managed resource is deleted - either "Delete"
+                  or "Orphan" the external resource. This field is planned to be deprecated
+                  in favor of the ManagementPolicies field in a future release. Currently,
+                  both could be set independently and non-default values would be
+                  honored if the feature flag is enabled. See the design doc for more
+                  information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223'
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forProvider:
+                properties:
+                  createMethod:
+                    description: resource override of create_method (see create_method
+                      provider config documentation) Defaults to `create_method` set
+                      on the provider. Allows per-resource override of `create_method`
+                      (see `create_method` provider config documentation)
+                    type: string
+                  createPath:
+                    description: (String) Defaults to path. The API path that represents
+                      where to CREATE (POST) objects of this type on the API server.
+                      Defaults to `path`. The API path that represents where to CREATE
+                      (POST) objects of this type on the API server.
+                    type: string
+                  createQueryString:
+                    description: (String) Query string to be included in the path
+                      when creating the resource. Query string to be included in the
+                      path
+                    type: string
+                  data:
+                    description: (String) Valid JSON object that this provider will
+                      manage with the API server. Valid JSON object that this provider
+                      will manage with the API server.
+                    type: string
+                  debug:
+                    description: (Boolean) Whether to emit verbose debug output while
+                      working with the API object on the server. Whether to emit verbose
+                      debug output while working with the API object on the server.
+                    type: boolean
+                  deleteQueryString:
+                    description: (String) Query string to be included in the path
+                      Query string to be included in the path
+                    type: string
+                  destroyData:
+                    description: (String) Valid JSON object to pass during to destroy
+                      requests. Valid JSON object to pass during to destroy requests.
+                    type: string
+                  destroyMethod:
+                    description: resource override of destroy_method (see destroy_method
+                      provider config documentation) Defaults to `destroy_method`
+                      set on the provider. Allows per-resource override of `destroy_method`
+                      (see `destroy_method` provider config documentation)
+                    type: string
+                  destroyPath:
+                    description: (String) Defaults to path/{id}. The API path that
+                      represents where to DESTROY (DELETE) objects of this type on
+                      the API server. Defaults to `path/{id}`. The API path that represents
+                      where to DESTROY (DELETE) objects of this type on the API server.
+                    type: string
+                  driftFields:
+                    description: An object that matches the structure of the data
+                      to which remote changes will be considered when detecting drift.
+                      Default to the empty object which means all changes are included.
+                    type: string
+                  driftFieldsFromData:
+                    description: '(String) Valid JSON object that this provider will
+                      manage with the API server. Set this to ''true'' to use the
+                      data as drift fields to make only explicitly set fields are
+                      checked for drift. Default: false'
+                    type: boolean
+                  forceNew:
+                    description: (List of String) Any changes to these values will
+                      result in recreating the resource instead of updating. Any changes
+                      to these values will result in recreating the resource instead
+                      of updating.
+                    items:
+                      type: string
+                    type: array
+                  idAttribute:
+                    description: resource override of id_attribute (see id_attribute
+                      provider config documentation) Defaults to `id_attribute` set
+                      on the provider. Allows per-resource override of `id_attribute`
+                      (see `id_attribute` provider config documentation)
+                    type: string
+                  ignoreAllServerChanges:
+                    description: 'Set this to ''true'' to ignore any remote changes.
+                      Default: false'
+                    type: boolean
+                  ignoreChangesTo:
+                    description: 'A list of fields to which remote changes will be
+                      ignored. To ignore changes to nested fields, use the dot syntax:
+                      ''metadata.timestamp'''
+                    items:
+                      type: string
+                    type: array
+                  objectId:
+                    description: (String) Defaults to the id learned by the provider
+                      during normal operations and id_attribute. Allows you to set
+                      the id manually. This is used in conjunction with the *_path
+                      attributes. Defaults to the id learned by the provider during
+                      normal operations and `id_attribute`. Allows you to set the
+                      id manually. This is used in conjunction with the `*_path` attributes.
+                    type: string
+                  path:
+                    description: (String) The API path on top of the base URL set
+                      in the provider that represents objects of this type on the
+                      API server. The API path on top of the base URL set in the provider
+                      that represents objects of this type on the API server.
+                    type: string
+                  queryString:
+                    description: (String) Query string to be included in the path
+                      Query string to be included in the path
+                    type: string
+                  readMethod:
+                    description: resource override of read_method (see read_method
+                      provider config documentation) Defaults to `read_method` set
+                      on the provider. Allows per-resource override of `read_method`
+                      (see `read_method` provider config documentation)
+                    type: string
+                  readPath:
+                    description: (String) Defaults to path/{id}. The API path that
+                      represents where to READ (GET) objects of this type on the API
+                      server. Defaults to `path/{id}`. The API path that represents
+                      where to READ (GET) objects of this type on the API server.
+                    type: string
+                  readQueryString:
+                    description: (String) Query string to be included in the path
+                      Query string to be included in the path
+                    type: string
+                  readSearch:
+                    additionalProperties:
+                      type: string
+                    description: (Map of String) Custom search for read_path. This
+                      map will take search_key, search_value, results_key and query_string
+                      (see datasource config documentation) Custom search for `read_path`.
+                      This map will take `search_key`, `search_value`, `results_key`
+                      and `query_string` (see datasource config documentation)
+                    type: object
+                  updateData:
+                    description: (String) Valid JSON object to pass during to update
+                      requests. Valid JSON object to pass during to update requests.
+                    type: string
+                  updateMethod:
+                    description: resource override of update_method (see update_method
+                      provider config documentation) Defaults to `update_method` set
+                      on the provider. Allows per-resource override of `update_method`
+                      (see `update_method` provider config documentation)
+                    type: string
+                  updatePath:
+                    description: (String) Defaults to path/{id}. The API path that
+                      represents where to UPDATE (PUT) objects of this type on the
+                      API server. Defaults to `path/{id}`. The API path that represents
+                      where to UPDATE (PUT) objects of this type on the API server.
+                    type: string
+                  updateQueryString:
+                    description: (String) Query string to be included in the path
+                      when updating the resource. Query string to be included in the
+                      path
+                    type: string
+                type: object
+              initProvider:
+                description: THIS IS AN ALPHA FIELD. Do not use it in production.
+                  It is not honored unless the relevant Crossplane feature flag is
+                  enabled, and may be changed or removed without notice. InitProvider
+                  holds the same fields as ForProvider, with the exception of Identifier
+                  and other resource reference fields. The fields that are in InitProvider
+                  are merged into ForProvider when the resource is created. The same
+                  fields are also added to the terraform ignore_changes hook, to avoid
+                  updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after
+                  creation, for example because of an external controller is managing
+                  them, like an autoscaler.
+                properties:
+                  createMethod:
+                    description: resource override of create_method (see create_method
+                      provider config documentation) Defaults to `create_method` set
+                      on the provider. Allows per-resource override of `create_method`
+                      (see `create_method` provider config documentation)
+                    type: string
+                  createPath:
+                    description: (String) Defaults to path. The API path that represents
+                      where to CREATE (POST) objects of this type on the API server.
+                      Defaults to `path`. The API path that represents where to CREATE
+                      (POST) objects of this type on the API server.
+                    type: string
+                  createQueryString:
+                    description: (String) Query string to be included in the path
+                      when creating the resource. Query string to be included in the
+                      path
+                    type: string
+                  data:
+                    description: (String) Valid JSON object that this provider will
+                      manage with the API server. Valid JSON object that this provider
+                      will manage with the API server.
+                    type: string
+                  debug:
+                    description: (Boolean) Whether to emit verbose debug output while
+                      working with the API object on the server. Whether to emit verbose
+                      debug output while working with the API object on the server.
+                    type: boolean
+                  deleteQueryString:
+                    description: (String) Query string to be included in the path
+                      Query string to be included in the path
+                    type: string
+                  destroyData:
+                    description: (String) Valid JSON object to pass during to destroy
+                      requests. Valid JSON object to pass during to destroy requests.
+                    type: string
+                  destroyMethod:
+                    description: resource override of destroy_method (see destroy_method
+                      provider config documentation) Defaults to `destroy_method`
+                      set on the provider. Allows per-resource override of `destroy_method`
+                      (see `destroy_method` provider config documentation)
+                    type: string
+                  destroyPath:
+                    description: (String) Defaults to path/{id}. The API path that
+                      represents where to DESTROY (DELETE) objects of this type on
+                      the API server. Defaults to `path/{id}`. The API path that represents
+                      where to DESTROY (DELETE) objects of this type on the API server.
+                    type: string
+                  driftFields:
+                    description: An object that matches the structure of the data
+                      to which remote changes will be considered when detecting drift.
+                      Default to the empty object which means all changes are included.
+                    type: string
+                  driftFieldsFromData:
+                    description: '(String) Valid JSON object that this provider will
+                      manage with the API server. Set this to ''true'' to use the
+                      data as drift fields to make only explicitly set fields are
+                      checked for drift. Default: false'
+                    type: boolean
+                  forceNew:
+                    description: (List of String) Any changes to these values will
+                      result in recreating the resource instead of updating. Any changes
+                      to these values will result in recreating the resource instead
+                      of updating.
+                    items:
+                      type: string
+                    type: array
+                  idAttribute:
+                    description: resource override of id_attribute (see id_attribute
+                      provider config documentation) Defaults to `id_attribute` set
+                      on the provider. Allows per-resource override of `id_attribute`
+                      (see `id_attribute` provider config documentation)
+                    type: string
+                  ignoreAllServerChanges:
+                    description: 'Set this to ''true'' to ignore any remote changes.
+                      Default: false'
+                    type: boolean
+                  ignoreChangesTo:
+                    description: 'A list of fields to which remote changes will be
+                      ignored. To ignore changes to nested fields, use the dot syntax:
+                      ''metadata.timestamp'''
+                    items:
+                      type: string
+                    type: array
+                  objectId:
+                    description: (String) Defaults to the id learned by the provider
+                      during normal operations and id_attribute. Allows you to set
+                      the id manually. This is used in conjunction with the *_path
+                      attributes. Defaults to the id learned by the provider during
+                      normal operations and `id_attribute`. Allows you to set the
+                      id manually. This is used in conjunction with the `*_path` attributes.
+                    type: string
+                  path:
+                    description: (String) The API path on top of the base URL set
+                      in the provider that represents objects of this type on the
+                      API server. The API path on top of the base URL set in the provider
+                      that represents objects of this type on the API server.
+                    type: string
+                  queryString:
+                    description: (String) Query string to be included in the path
+                      Query string to be included in the path
+                    type: string
+                  readMethod:
+                    description: resource override of read_method (see read_method
+                      provider config documentation) Defaults to `read_method` set
+                      on the provider. Allows per-resource override of `read_method`
+                      (see `read_method` provider config documentation)
+                    type: string
+                  readPath:
+                    description: (String) Defaults to path/{id}. The API path that
+                      represents where to READ (GET) objects of this type on the API
+                      server. Defaults to `path/{id}`. The API path that represents
+                      where to READ (GET) objects of this type on the API server.
+                    type: string
+                  readQueryString:
+                    description: (String) Query string to be included in the path
+                      Query string to be included in the path
+                    type: string
+                  readSearch:
+                    additionalProperties:
+                      type: string
+                    description: (Map of String) Custom search for read_path. This
+                      map will take search_key, search_value, results_key and query_string
+                      (see datasource config documentation) Custom search for `read_path`.
+                      This map will take `search_key`, `search_value`, `results_key`
+                      and `query_string` (see datasource config documentation)
+                    type: object
+                  updateData:
+                    description: (String) Valid JSON object to pass during to update
+                      requests. Valid JSON object to pass during to update requests.
+                    type: string
+                  updateMethod:
+                    description: resource override of update_method (see update_method
+                      provider config documentation) Defaults to `update_method` set
+                      on the provider. Allows per-resource override of `update_method`
+                      (see `update_method` provider config documentation)
+                    type: string
+                  updatePath:
+                    description: (String) Defaults to path/{id}. The API path that
+                      represents where to UPDATE (PUT) objects of this type on the
+                      API server. Defaults to `path/{id}`. The API path that represents
+                      where to UPDATE (PUT) objects of this type on the API server.
+                    type: string
+                  updateQueryString:
+                    description: (String) Query string to be included in the path
+                      when updating the resource. Query string to be included in the
+                      path
+                    type: string
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: 'THIS IS AN ALPHA FIELD. Do not use it in production.
+                  It is not honored unless the relevant Crossplane feature flag is
+                  enabled, and may be changed or removed without notice. ManagementPolicies
+                  specify the array of actions Crossplane is allowed to take on the
+                  managed and external resources. This field is planned to replace
+                  the DeletionPolicy field in a future release. Currently, both could
+                  be set independently and non-default values would be honored if
+                  the feature flag is enabled. If both are custom, the DeletionPolicy
+                  field will be ignored. See the design doc for more information:
+                  https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md'
+                items:
+                  description: A ManagementAction represents an action that the Crossplane
+                    controllers can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  name: default
+                description: ProviderConfigReference specifies how the provider that
+                  will be used to create, observe, update, and delete this managed
+                  resource should be configured.
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                  policy:
+                    description: Policies for referencing.
+                    properties:
+                      resolution:
+                        default: Required
+                        description: Resolution specifies whether resolution of this
+                          reference is required. The default is 'Required', which
+                          means the reconcile will fail if the reference cannot be
+                          resolved. 'Optional' means this reference will be a no-op
+                          if it cannot be resolved.
+                        enum:
+                        - Required
+                        - Optional
+                        type: string
+                      resolve:
+                        description: Resolve specifies when this reference should
+                          be resolved. The default is 'IfNotPresent', which will attempt
+                          to resolve the reference only when the corresponding field
+                          is not present. Use 'Always' to resolve the reference on
+                          every reconcile.
+                        enum:
+                        - Always
+                        - IfNotPresent
+                        type: string
+                    type: object
+                required:
+                - name
+                type: object
+              providerRef:
+                description: 'ProviderReference specifies the provider that will be
+                  used to create, observe, update, and delete this managed resource.
+                  Deprecated: Please use ProviderConfigReference, i.e. `providerConfigRef`'
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                  policy:
+                    description: Policies for referencing.
+                    properties:
+                      resolution:
+                        default: Required
+                        description: Resolution specifies whether resolution of this
+                          reference is required. The default is 'Required', which
+                          means the reconcile will fail if the reference cannot be
+                          resolved. 'Optional' means this reference will be a no-op
+                          if it cannot be resolved.
+                        enum:
+                        - Required
+                        - Optional
+                        type: string
+                      resolve:
+                        description: Resolve specifies when this reference should
+                          be resolved. The default is 'IfNotPresent', which will attempt
+                          to resolve the reference only when the corresponding field
+                          is not present. Use 'Always' to resolve the reference on
+                          every reconcile.
+                        enum:
+                        - Always
+                        - IfNotPresent
+                        type: string
+                    type: object
+                required:
+                - name
+                type: object
+              publishConnectionDetailsTo:
+                description: PublishConnectionDetailsTo specifies the connection secret
+                  config which contains a name, metadata and a reference to secret
+                  store config to which any connection details for this managed resource
+                  should be written. Connection details frequently include the endpoint,
+                  username, and password required to connect to the managed resource.
+                properties:
+                  configRef:
+                    default:
+                      name: default
+                    description: SecretStoreConfigRef specifies which secret store
+                      config should be used for this ConnectionSecret.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: Resolution specifies whether resolution of
+                              this reference is required. The default is 'Required',
+                              which means the reconcile will fail if the reference
+                              cannot be resolved. 'Optional' means this reference
+                              will be a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: Resolve specifies when this reference should
+                              be resolved. The default is 'IfNotPresent', which will
+                              attempt to resolve the reference only when the corresponding
+                              field is not present. Use 'Always' to resolve the reference
+                              on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  metadata:
+                    description: Metadata is the metadata for connection secret.
+                    properties:
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        description: Annotations are the annotations to be added to
+                          connection secret. - For Kubernetes secrets, this will be
+                          used as "metadata.annotations". - It is up to Secret Store
+                          implementation for others store types.
+                        type: object
+                      labels:
+                        additionalProperties:
+                          type: string
+                        description: Labels are the labels/tags to be added to connection
+                          secret. - For Kubernetes secrets, this will be used as "metadata.labels".
+                          - It is up to Secret Store implementation for others store
+                          types.
+                        type: object
+                      type:
+                        description: Type is the SecretType for the connection secret.
+                          - Only valid for Kubernetes Secret Stores.
+                        type: string
+                    type: object
+                  name:
+                    description: Name is the name of the connection secret.
+                    type: string
+                required:
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: WriteConnectionSecretToReference specifies the namespace
+                  and name of a Secret to which any connection details for this managed
+                  resource should be written. Connection details frequently include
+                  the endpoint, username, and password required to connect to the
+                  managed resource. This field is planned to be replaced in a future
+                  release in favor of PublishConnectionDetailsTo. Currently, both
+                  could be set independently and connection details would be published
+                  to both without affecting each other.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                  namespace:
+                    description: Namespace of the secret.
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: data is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.data)
+                || has(self.initProvider.data)'
+            - message: path is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.path)
+                || has(self.initProvider.path)'
+          status:
+            description: ObjectStatus defines the observed state of Object.
+            properties:
+              atProvider:
+                properties:
+                  createMethod:
+                    description: resource override of create_method (see create_method
+                      provider config documentation) Defaults to `create_method` set
+                      on the provider. Allows per-resource override of `create_method`
+                      (see `create_method` provider config documentation)
+                    type: string
+                  createPath:
+                    description: (String) Defaults to path. The API path that represents
+                      where to CREATE (POST) objects of this type on the API server.
+                      Defaults to `path`. The API path that represents where to CREATE
+                      (POST) objects of this type on the API server.
+                    type: string
+                  createQueryString:
+                    description: (String) Query string to be included in the path
+                      when creating the resource. Query string to be included in the
+                      path
+                    type: string
+                  data:
+                    description: (String) Valid JSON object that this provider will
+                      manage with the API server. Valid JSON object that this provider
+                      will manage with the API server.
+                    type: string
+                  debug:
+                    description: (Boolean) Whether to emit verbose debug output while
+                      working with the API object on the server. Whether to emit verbose
+                      debug output while working with the API object on the server.
+                    type: boolean
+                  deleteQueryString:
+                    description: (String) Query string to be included in the path
+                      Query string to be included in the path
+                    type: string
+                  destroyData:
+                    description: (String) Valid JSON object to pass during to destroy
+                      requests. Valid JSON object to pass during to destroy requests.
+                    type: string
+                  destroyMethod:
+                    description: resource override of destroy_method (see destroy_method
+                      provider config documentation) Defaults to `destroy_method`
+                      set on the provider. Allows per-resource override of `destroy_method`
+                      (see `destroy_method` provider config documentation)
+                    type: string
+                  destroyPath:
+                    description: (String) Defaults to path/{id}. The API path that
+                      represents where to DESTROY (DELETE) objects of this type on
+                      the API server. Defaults to `path/{id}`. The API path that represents
+                      where to DESTROY (DELETE) objects of this type on the API server.
+                    type: string
+                  driftFields:
+                    description: An object that matches the structure of the data
+                      to which remote changes will be considered when detecting drift.
+                      Default to the empty object which means all changes are included.
+                    type: string
+                  driftFieldsFromData:
+                    description: '(String) Valid JSON object that this provider will
+                      manage with the API server. Set this to ''true'' to use the
+                      data as drift fields to make only explicitly set fields are
+                      checked for drift. Default: false'
+                    type: boolean
+                  forceNew:
+                    description: (List of String) Any changes to these values will
+                      result in recreating the resource instead of updating. Any changes
+                      to these values will result in recreating the resource instead
+                      of updating.
+                    items:
+                      type: string
+                    type: array
+                  id:
+                    description: (String) The ID of this resource.
+                    type: string
+                  idAttribute:
+                    description: resource override of id_attribute (see id_attribute
+                      provider config documentation) Defaults to `id_attribute` set
+                      on the provider. Allows per-resource override of `id_attribute`
+                      (see `id_attribute` provider config documentation)
+                    type: string
+                  ignoreAllServerChanges:
+                    description: 'Set this to ''true'' to ignore any remote changes.
+                      Default: false'
+                    type: boolean
+                  ignoreChangesTo:
+                    description: 'A list of fields to which remote changes will be
+                      ignored. To ignore changes to nested fields, use the dot syntax:
+                      ''metadata.timestamp'''
+                    items:
+                      type: string
+                    type: array
+                  objectId:
+                    description: (String) Defaults to the id learned by the provider
+                      during normal operations and id_attribute. Allows you to set
+                      the id manually. This is used in conjunction with the *_path
+                      attributes. Defaults to the id learned by the provider during
+                      normal operations and `id_attribute`. Allows you to set the
+                      id manually. This is used in conjunction with the `*_path` attributes.
+                    type: string
+                  path:
+                    description: (String) The API path on top of the base URL set
+                      in the provider that represents objects of this type on the
+                      API server. The API path on top of the base URL set in the provider
+                      that represents objects of this type on the API server.
+                    type: string
+                  queryString:
+                    description: (String) Query string to be included in the path
+                      Query string to be included in the path
+                    type: string
+                  readMethod:
+                    description: resource override of read_method (see read_method
+                      provider config documentation) Defaults to `read_method` set
+                      on the provider. Allows per-resource override of `read_method`
+                      (see `read_method` provider config documentation)
+                    type: string
+                  readPath:
+                    description: (String) Defaults to path/{id}. The API path that
+                      represents where to READ (GET) objects of this type on the API
+                      server. Defaults to `path/{id}`. The API path that represents
+                      where to READ (GET) objects of this type on the API server.
+                    type: string
+                  readQueryString:
+                    description: (String) Query string to be included in the path
+                      Query string to be included in the path
+                    type: string
+                  readSearch:
+                    additionalProperties:
+                      type: string
+                    description: (Map of String) Custom search for read_path. This
+                      map will take search_key, search_value, results_key and query_string
+                      (see datasource config documentation) Custom search for `read_path`.
+                      This map will take `search_key`, `search_value`, `results_key`
+                      and `query_string` (see datasource config documentation)
+                    type: object
+                  updateData:
+                    description: (String) Valid JSON object to pass during to update
+                      requests. Valid JSON object to pass during to update requests.
+                    type: string
+                  updateMethod:
+                    description: resource override of update_method (see update_method
+                      provider config documentation) Defaults to `update_method` set
+                      on the provider. Allows per-resource override of `update_method`
+                      (see `update_method` provider config documentation)
+                    type: string
+                  updatePath:
+                    description: (String) Defaults to path/{id}. The API path that
+                      represents where to UPDATE (PUT) objects of this type on the
+                      API server. Defaults to `path/{id}`. The API path that represents
+                      where to UPDATE (PUT) objects of this type on the API server.
+                    type: string
+                  updateQueryString:
+                    description: (String) Query string to be included in the path
+                      when updating the resource. Query string to be included in the
+                      path
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: LastTransitionTime is the last time this condition
+                        transitioned from one status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A Message containing details about this condition's
+                        last transition from one status to another, if any.
+                      type: string
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: Type of this condition. At most one of each condition
+                        type may apply to a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

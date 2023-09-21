@@ -1,4 +1,4 @@
-apiVersion: restapi.upbound.io/v1beta1
+apiVersion: restapi.k8s.karevoll.no/v1beta1
 kind: ProviderConfig
 metadata:
   name: default
