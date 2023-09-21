@@ -10,7 +10,7 @@ export TERRAFORM_PROVIDER_SOURCE ?= nkvoll/restapi
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/nkvoll/terraform-provider-restapi
 export TERRAFORM_PROVIDER_VERSION ?= 0.5.3
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-restapi
-export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://releases.hashicorp.com/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)/$(TERRAFORM_PROVIDER_VERSION)
+export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= $(TERRAFORM_PROVIDER_REPO)/releases/download/v$(TERRAFORM_PROVIDER_VERSION)
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-restapi_v0.5.3_x5
 export TERRAFORM_DOCS_PATH ?= docs/resources
 
