@@ -1,6 +1,6 @@
 module github.com/nkvoll/provider-restapi
 
-go 1.20
+go 1.19
 
 require (
 	github.com/alecthomas/kingpin/v2 v2.3.2
